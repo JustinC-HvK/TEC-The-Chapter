@@ -32,7 +32,7 @@ namespace WebApplication2
                 });
 
 
-            //something with the program class isnt booting, something to do with the cookies
+
 
         }
 
@@ -53,6 +53,8 @@ namespace WebApplication2
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
