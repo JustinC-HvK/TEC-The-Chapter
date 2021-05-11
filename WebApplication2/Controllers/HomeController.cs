@@ -63,7 +63,15 @@ namespace WebApplication1.Controllers
                 await HttpContext.SignInAsync(claimsPrincipal);
                 return Redirect(returnUrl);
             }
-            return BadRequest();
+            TempData["Error"] = "Error. Username or Password is invalid";
+            return View("login");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return Redirect("/");
         }
         public IActionResult Menu()
         {
