@@ -1,13 +1,22 @@
-﻿
-@{
+﻿@{
+
+
     var returnUrl = ViewData["ReturnUrl"] as string;
     var error = TempData["Error"] as string;
+
 }
+
 <h1>User Login</h1>
+
+
 @if (!string.IsNullOrEmpty(error))
             {
     <h2 class="alert-danger" style="padding:20px;">@error</h2>
             }
+
+
+
+
 
 <div class="row">
     <div class="col-md-12">
@@ -19,6 +28,7 @@
                 <input type="password" name="password" placeholder="Password" />
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
+            <button type="button" class="btn btn-primary">Forgot Password</button>
         </form>
 
 

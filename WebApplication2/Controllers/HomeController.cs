@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApplication2.Models;
+using System.Data.SqlClient;
+
 
 namespace WebApplication1.Controllers
 {
@@ -20,6 +23,13 @@ namespace WebApplication1.Controllers
         {
             _logger = logger;
         }
+
+
+
+
+
+
+
 
 
         public IActionResult Aboutus()
@@ -50,9 +60,26 @@ namespace WebApplication1.Controllers
             return View();
         }
 
+
+
+
+
         [HttpPost("login")]
         public async Task<IActionResult> Validate(string username, string password , string returnUrl)
         {
+
+            SqlConnection conn = new SqlConnection("string:jdbc:sqlserver://chapterdb.database.windows.net:1433;database=CHAPTERDB;user=TECADMIN@chapterdb;password=Thepasswordispassword1;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;");
+            SqlCommand com = new SqlCommand("userinfo" , conn);
+            com.CommandType = System.Data.CommandType.StoredProcedure;
+            com.Parameters.AddWithValue("username" , username);
+            com.Parameters.AddWithValue("password" , password);
+
+            conn.Open();
+
+
+            conn.Close();
+
+
             if(username=="Admin" && password =="Admin")
             {
                 var claims = new List<Claim>();
@@ -66,6 +93,17 @@ namespace WebApplication1.Controllers
             TempData["Error"] = "Error. Username or Password is invalid";
             return View("login");
         }
+
+
+
+
+
+
+
+
+
+
+
 
         [Authorize]
         public async Task<IActionResult> Logout()
