@@ -73,6 +73,7 @@ namespace WebApplication1.Controllers
             SqlCommand com = new SqlCommand(sfu , conn);
             SqlDataReader dr = com.ExecuteReader();
 
+            //only reading first row, need to add in a loop
             if (dr.Read())
             {
                 if (username.Equals(dr["username"].ToString()) && password.Equals(dr["password"].ToString()))
