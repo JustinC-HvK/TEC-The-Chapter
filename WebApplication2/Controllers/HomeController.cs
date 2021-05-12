@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApplication2.Models;
+using System.Data.SqlClient;
+
 
 namespace WebApplication1.Controllers
 {
@@ -20,6 +23,13 @@ namespace WebApplication1.Controllers
         {
             _logger = logger;
         }
+
+
+
+
+
+
+
 
 
         public IActionResult Aboutus()
@@ -50,22 +60,60 @@ namespace WebApplication1.Controllers
             return View();
         }
 
+
+
+
+
         [HttpPost("login")]
         public async Task<IActionResult> Validate(string username, string password , string returnUrl)
         {
-            if(username=="Admin" && password =="Admin")
+            SqlConnection conn = new SqlConnection(@"Server=tcp:chapterdb.database.windows.net,1433;Initial Catalog=CHAPTERDB;Persist Security Info=False;User ID=TECADMIN;Password=Thepasswordispassword1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            conn.Open();
+            string sfu = "select username, password from userinfo";
+            SqlCommand com = new SqlCommand(sfu , conn);
+            SqlDataReader dr = com.ExecuteReader();
+
+            //only reading first row, need to add in a loop
+            if (dr.Read())
             {
-                var claims = new List<Claim>();
-                claims.Add(new Claim("username", username));
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
-                var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
-                var claimsPrincipal = new System.Security.Claims.ClaimsPrincipal(claimsIdentity);
-                await HttpContext.SignInAsync(claimsPrincipal);
-                return Redirect(returnUrl);
+                if (username.Equals(dr["username"].ToString()) && password.Equals(dr["password"].ToString()))
+                {
+                    var claims = new List<Claim>();
+                    claims.Add(new Claim("username", username));
+                    claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
+                    var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+                    var claimsPrincipal = new System.Security.Claims.ClaimsPrincipal(claimsIdentity);
+                    await HttpContext.SignInAsync(claimsPrincipal);
+                    return Redirect(returnUrl);
+                }
+
+                else
+                {
+                    TempData["Error"] = "Error. Username or Password is invalid";
+                    return View("login");
+                }
+
+                conn.Close();
             }
-            TempData["Error"] = "Error. Username or Password is invalid";
-            return View("login");
+
+            else
+            {
+                TempData["Error"] = "Error. Username or Password is invalid";
+                return View("login");
+               
+            }
         }
+
+
+
+
+
+
+
+
+
+
+
 
         [Authorize]
         public async Task<IActionResult> Logout()
