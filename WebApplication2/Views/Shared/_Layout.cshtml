@@ -7,53 +7,63 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/style.css" />
+    <style>
+        body {
+            font-family: "Times New Roman", Georgia, Serif;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Playfair Display";
+            letter-spacing: 5px;
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebApplication2</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="/images/The_chaptere.jpg" alt="HTML5 Icon" style="width:128px;height:128px;"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
+                        <li class="nav-item w3-bar-item w3-button">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item w3-bar-item w3-button">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Aboutus">About Us</a>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item w3-bar-item w3-button">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Secured">Secured</a>
                         </li>
                         <li class="nav-item">
 
-                        <li class="nav-item">
+                        <li class="nav-item w3-bar-item w3-button">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Menu">Menu</a>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item w3-bar-item w3-button">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item w3-bar-item w3-button">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Reservations">Reservations</a>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item w3-bar-item w3-button">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Register">Register</a>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item w3-bar-item w3-button">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
                         </li>
 
                         @if(User.Identity.IsAuthenticated) {  
-                        <li class="nav-item">
+                        <li class="nav-item w3-bar-item w3-button">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
                         </li>
                         }
@@ -68,7 +78,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted ">
         <div class="container">
             &copy; 2021 - WebApplication2 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
