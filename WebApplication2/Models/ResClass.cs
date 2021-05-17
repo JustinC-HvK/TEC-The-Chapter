@@ -8,8 +8,13 @@ namespace WebApplication2.Models
 {
     public class ResClass
     {
-        [Required]
+        [Required(ErrorMessage ="Please Select a valid Date")]
         public DateTime Date { get; set; }
-        
+        public DateTime Time { get; set; }
+    }
+    public class Timepick
+    {
+        [Required]
+        public DateTime Time { get; set; }
     }
 }
