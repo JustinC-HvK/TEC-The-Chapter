@@ -1,3 +1,43 @@
-﻿@{
+﻿@model WebApplication2.Models.ResClass
+
+@{
+    ViewData["Title"] = "Reservations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>Reservations Page</h1>
+
+@using (Html.BeginForm())
+{
+    <label>Date: </label>
+    @Html.TextBoxFor(model => model.Date, new { @class = "ResClass" })
+
+    @Html.TextBoxFor(model =>model.Time, new { @class = "resClass"})
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="/resources/demos/style.css" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $(".ResClass").datepicker({
+            dateFormat: "dd-mm-yy",
+            changeMonth: true,
+            changeYear: true,
+            minDate: new Date(),
+        });
+        $('.timepicker').timepicker({
+            timeFormat: 'h:mm p',
+            interval: 900,
+            minTime: '15',
+            maxTime: '10:00pm',
+            defaultTime: '11',
+            startTime: '10:00',
+            dynamic: false,
+            dropdown: true,
+            scrollbar: true
+        });
+    </script>
+}
