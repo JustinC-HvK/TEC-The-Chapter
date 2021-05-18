@@ -61,15 +61,15 @@ namespace WebApplication1.Controllers
         }
 
 
-
+        
 
 
         [HttpPost("login")]
         public async Task<IActionResult> Validate(string username, string password , string returnUrl)
         {
-            SqlConnection conn = new SqlConnection(@"Server=tcp:chapterdb.database.windows.net,1433;Initial Catalog=CHAPTERDB;Persist Security Info=False;User ID=TECADMIN;Password=Thepasswordispassword1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             conn.Open();
-            string sfu = "select username, password from userinfo";
+            string sfu = "select username, password from usertable";
             SqlCommand com = new SqlCommand(sfu , conn);
             SqlDataReader dr = com.ExecuteReader();
 
@@ -93,7 +93,7 @@ namespace WebApplication1.Controllers
                     return View("login");
                 }
 
-                conn.Close();
+
             }
 
             else
@@ -148,3 +148,4 @@ namespace WebApplication1.Controllers
         }
     }
 }
+
