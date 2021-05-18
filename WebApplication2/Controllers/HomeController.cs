@@ -60,10 +60,6 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-
-
-
-
         [HttpPost("login")]
         public async Task<IActionResult> Validate(string username, string password, string returnUrl)
         {
@@ -93,8 +89,6 @@ namespace WebApplication1.Controllers
                 var claimsPrincipal = new System.Security.Claims.ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync(claimsPrincipal);
                 return Redirect(returnUrl);
-
-
             }
 
             //if it doesnt
