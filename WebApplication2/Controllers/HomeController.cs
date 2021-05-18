@@ -18,10 +18,12 @@ namespace WebApplication1.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationUserClass _auc;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationUserClass auc)
         {
             _logger = logger;
+            _auc = auc;
         }
 
 
@@ -125,6 +127,24 @@ namespace WebApplication1.Controllers
 
         public IActionResult Register()
         {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Register(UserClass uc)
+        {
+            if (ModelState.IsValid)
+            {
+                if (uc.dob.Year > 1900 && uc.dob.Year < 2003)
+                {
+                    _auc.Add(uc);
+                    _auc.SaveChanges();
+                    ViewBag.message = "Registration of user" + uc.username + " Is complete";
+                    return RedirectToAction("Index");
+                }
+
+            }
             return View();
         }
 
