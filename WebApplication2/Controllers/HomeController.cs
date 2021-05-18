@@ -61,58 +61,50 @@ namespace WebApplication1.Controllers
         }
 
 
-        
+
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Validate(string username, string password , string returnUrl)
+        public async Task<IActionResult> Validate(string username, string password, string returnUrl)
         {
+            //setting the variables/strings/connections
             SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            string sfu = "usr_login";
+            SqlCommand com = new SqlCommand(sfu, conn);
+            com.CommandType = System.Data.CommandType.StoredProcedure;
+            com.Parameters.AddWithValue("@username", username.ToString());
+            com.Parameters.AddWithValue("@password", password.ToString());
+
+            //open connection
             conn.Open();
-            string sfu = "select username, password from usertable";
-            SqlCommand com = new SqlCommand(sfu , conn);
-            SqlDataReader dr = com.ExecuteReader();
 
-            //only reading first row, need to add in a loop
-            if (dr.Read())
+            int loginResult = Convert.ToInt32(com.ExecuteScalar());
+            
+            //close connection
+            conn.Close();
+
+            //if loginresult=one thats in the db
+            if (loginResult == 1)
             {
-                if (username.Equals(dr["username"].ToString()) && password.Equals(dr["password"].ToString()))
-                {
-                    var claims = new List<Claim>();
-                    claims.Add(new Claim("username", username));
-                    claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
-                    var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
-                    var claimsPrincipal = new System.Security.Claims.ClaimsPrincipal(claimsIdentity);
-                    await HttpContext.SignInAsync(claimsPrincipal);
-                    return Redirect(returnUrl);
-                }
-
-                else
-                {
-                    TempData["Error"] = "Error. Username or Password is invalid";
-                    return View("login");
-                }
+                var claims = new List<Claim>();
+                claims.Add(new Claim("username", username));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
+                var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+                var claimsPrincipal = new System.Security.Claims.ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync(claimsPrincipal);
+                return Redirect(returnUrl);
 
 
             }
 
+            //if it doesnt
             else
             {
                 TempData["Error"] = "Error. Username or Password is invalid";
                 return View("login");
-               
             }
+
         }
-
-
-
-
-
-
-
-
-
-
 
 
         [Authorize]
@@ -148,4 +140,3 @@ namespace WebApplication1.Controllers
         }
     }
 }
-
