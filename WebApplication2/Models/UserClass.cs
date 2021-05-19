@@ -33,6 +33,7 @@ namespace WebApplication2.Models
         [Compare("password")]
         public string confirmpassword { get; set; }
 
+
         [Required(ErrorMessage = "Please enter your email address")]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "E-mail address")]

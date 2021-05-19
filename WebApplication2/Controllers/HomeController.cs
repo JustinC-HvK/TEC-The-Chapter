@@ -125,6 +125,7 @@ namespace WebApplication2.Controllers
             return View();
         }
 
+
         public IActionResult Register()
         {
             return View();
@@ -138,6 +139,7 @@ namespace WebApplication2.Controllers
             {
                 if (uc.dob.Year > 1900 && uc.dob.Year < 2003)
                 {
+                    //uc.password =
                     _auc.Add(uc);
                     _auc.SaveChanges();
                     ViewBag.message = "Registration of user" + uc.username + " Is complete";
