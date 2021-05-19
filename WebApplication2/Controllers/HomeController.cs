@@ -13,14 +13,14 @@ using WebApplication2.Models;
 using System.Data.SqlClient;
 
 
-namespace WebApplication1.Controllers
+namespace WebApplication2.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationUserClass _auc;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationUserClass auc)
+        public HomeController(ILogger<HomeController> logger, ApplicationUserClass auc )
         {
             _logger = logger;
             _auc = auc;
