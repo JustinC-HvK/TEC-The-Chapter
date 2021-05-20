@@ -8,6 +8,7 @@ namespace WebApplication2.Models
 {
     public class UserClass
     {
+        //Registration form fields for use in validation
         [Key]
 
         [Required(ErrorMessage = "Please enter your first name")]

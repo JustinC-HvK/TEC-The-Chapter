@@ -146,10 +146,11 @@ namespace WebApplication2.Controllers
 
                     connect.Close();
 
-                    //These lines are funcioning code commented out for test purposes
-                    //_auc.Add(uc);
-                    //_auc.SaveChanges();
-                    //ViewBag.message = "Registration of user" + uc.username + " Is complete";
+                        //These lines are funcioning code commented out for test purposes
+                        //_auc.Add(uc);
+                        //_auc.SaveChanges();
+                        //ViewBag.message = "Registration of user" + uc.username + " Is complete";
+                    //Return the user to the Index
                     return RedirectToAction("Index");
                 }
 
