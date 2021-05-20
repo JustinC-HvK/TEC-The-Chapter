@@ -62,10 +62,14 @@
 
 
     <h2>Date</h2>
-    @Html.TextBoxFor(model => model.Date, new { @class = "ResClass" })
+    <input name="aDate" id="datepicker" type="text"  class="ResClass"/>
+
+    /*@Html.TextBoxFor(model => model.Date, new { @class = "ResClass" })*/
     <br />
     <h2>Time</h2>
-    @Html.TextBoxFor(model => model.Time, new { @class = "Timepick" })
+    <input name="aTime" id="timepick" type="text" class="Timepick"/>
+
+    /*@Html.TextBoxFor(model => model.Time, new { @class = "Timepick" })*/
 
     <div class="button">
         <h2>Party Size</h2>
@@ -91,8 +95,9 @@
         </select>
     </div>
     <br />
+
     <div class="button">
-        <input type="submit" name="submit" value="Reserve Your Table" />
+        <input type="submit" name="submit" value="Reserve Your Table" asp-action="ReservationBooking"/>
     </div>
 }
 
@@ -108,14 +113,14 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
     <script>
-        $(".ResClass").datepicker({
+        $("#datepicker").datepicker({
             dateFormat: "dd-mm-yy",
             changeMonth: true,
             changeYear: true,
             minDate: "+1d",
             defaultTime: "+1d",
         });
-        $('.Timepick').timepicker({
+        $('#timepick').timepicker({
             timeFormat: 'h:mm p',
             interval: 30,
             minTime: '6:00pm',
