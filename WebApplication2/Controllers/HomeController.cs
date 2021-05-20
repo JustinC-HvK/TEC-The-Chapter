@@ -27,14 +27,6 @@ namespace WebApplication2.Controllers
             _auc = auc;
         }
 
-
-
-
-
-
-
-
-
         public IActionResult Aboutus()
         {
             return View();
@@ -62,10 +54,6 @@ namespace WebApplication2.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
-
-
-
-
 
         [HttpPost("login")]
         public async Task<IActionResult> Validate(string username, string password, string returnUrl)
@@ -96,8 +84,6 @@ namespace WebApplication2.Controllers
                 var claimsPrincipal = new System.Security.Claims.ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync(claimsPrincipal);
                 return Redirect(returnUrl);
-
-
             }
 
             //if it doesnt
@@ -181,6 +167,25 @@ namespace WebApplication2.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult ReservationBooking(DateTime aDate, DateTime aTime, string party_size, string occasion)
+        {
+            
+            //Runs the SQL Procedure Command
+            SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            SqlCommand cmd = new SqlCommand("reservationpro", conn);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@p_date", aDate);
+            cmd.Parameters.AddWithValue("@p_time", aTime);
+            cmd.Parameters.AddWithValue("@p_partysize", party_size);
+            cmd.Parameters.AddWithValue("@p_occasion", occasion);
+
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
+
+            return Redirect("Secured");
         }
     }
 }
