@@ -38,7 +38,7 @@
                         </li>
 
                         <li class="nav-item w3-bar-item w3-button">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Secured">Secured</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Secured">Reservations</a>
                         </li>
                         <li class="nav-item">
 
@@ -51,15 +51,7 @@
                         </li>
 
                         <li class="nav-item w3-bar-item w3-button">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Reservations">Reservations</a>
-                        </li>
-
-                        <li class="nav-item w3-bar-item w3-button">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Register">Register</a>
-                        </li>
-
-                        <li class="nav-item w3-bar-item w3-button">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
                         </li>
 
                         @if(User.Identity.IsAuthenticated) {  
