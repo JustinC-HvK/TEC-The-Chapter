@@ -1,106 +1,124 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Admin";
 }
 <h1>@ViewData["Title"]</h1>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body {
-            font-family: "Times New Roman", Georgia, Serif;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            font-family: "Playfair Display";
-            letter-spacing: 5px;
-        }
-    </style>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   
 </head>
 <body>
-    <!-- About Container -->
-    <div class="w3-container" id="about">
-        <div class="w3-content" style="max-width:700px">
-            <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">Privacy</span></h5>
-           
-            <p>
-                At The Chapter, we are committed to protecting your privacy as an online visitor to our website. We use the information we collect about you to maximize the services that we provide to you.
-                We respect the privacy and confidentiality of the information provided by you and adhere to the New Zealand Privacy Principles. Please read our privacy policy below carefully.
-            </p>
 
-            <p>You may change your details at any time by advising us in writing via email. All information we receive from our customers is protected by our secure server. Restaurant Mason’s secure server
-            software encrypts all customer information before it is sent to us. Furthermore, all customer data collected is secured against unauthorized use or access. Credit card information is not stored by us on our servers.</p>
-
-            <h2>Storage and Security of your Information</h2>
-
-            <p>We receive and store information you enter on our website or give us in any other way from time to time. You may provide basic contact information such as your name, date of birth, phone number, address, and email address
-            to enable us to send information or process your product order and we may also collect additional information at other times, including but not limited to, when you provide feedback, change your content or email preferences,
-            respond to a survey, or communicate with our customer support.</p>
-
-            <p>We may use personal information collected from you for the purpose of providing you with direct marketing material, updates regarding our website and information in the form of a newsletter. This will only apply if you have
-            registered or subscribed to such publications by registering your details with us. However, if you wish to cease receiving any such information you may let us know either by email or unsubscribing at any time and your request
-            will be actioned immediately.</p>
-
-            <p>Individual profile and company details are not used for any other purpose. Details are only supplied to a third party supplier when it is required by law, for goods or services which you have purchased or to protect our copyright,
-            trademarks and other legal rights.</p>
-
-            <p>We respect the privacy of our online visitors. We may collect information on or through this website that can personally identify you. For example, we collect personally identifiable information which you volunteer to us to respond
-            to visitor questions and comments about us and our products and services, and to mail e-newsletters (“Personal Data”).</p>
-
-            <p>We will use all reasonable means to protect the confidentiality of your Personal Data while in our possession or control. We will not knowingly share any of your Personal Data with any third party other than our service providers who
-            assist us in providing the information and/or services we are providing to you. To the extent that we do share your personal information with a service provider, we would only do so if that party has agreed to comply with our privacy
-            standards as described in this privacy policy. Some of our service providers may be overseas and may not be subject to Australian Privacy Laws. Please contact us if you require specific details.</p>
-
-            <p>Any non-personal information, communications and material you send to this website or to us by email, or which we obtain from third parties without promises of confidentiality, may be kept, used and disclosed by us on a non-confidential
-            basis. We are free to use and reproduce any such information freely, and for any purpose whatsoever. Specifically, we will be free to use any ideas, concepts, know-how or techniques contained in such information for any purpose, including
-            developing, manufacturing or marketing products.</p>
-
-            <h2>Cookies</h2>
-
-            <p>Any non-personal information, communications and material you send to this website or to us by email, or which we obtain from third parties without promises of confidentiality, may be kept, used and disclosed by us on a non-confidential
-            basis. We are free to use and reproduce any such information freely, and for any purpose whatsoever. Specifically, we will be free to use any ideas, concepts, know-how or techniques contained in such information for any purpose, including
-            developing, manufacturing or marketing products.</p>
-
-            <p>
-                Our website uses cookies to analyse website traffic and help us provide a better website visitor experience. In addition, cookies may be used to serve relevant ads to website visitors through third party services such as Google Adwords. These ads may appear on this website or other websites you visit.
-
-            </p>
-
-            <h2>Disclosure of your Information</h2>
-
-            <p>We may from time to time need to disclose certain information, which may include your Personal Data, to comply with a legal requirement, such as a law, regulation, court order, subpoena, warrant, in the course of a legal proceeding or in response to a law enforcement agency request. Also, we may use your
-            Personal Data to protect the rights, property or safety of Restaurant Mason, our customers or third parties.</p>
-
-            <p>If there is a change of control in one of our businesses (whether by merger, sale, transfer of assets or otherwise) customer information, which may include your Personal Data, could be disclosed to a potential purchaser under a confidentiality agreement. We would only disclose your information in good faith
-            and where required by any of the above circumstances.</p>
-
-            <h2>Security</h2>
-
-            <p>We strive to ensure the security, integrity and privacy of personal information submitted to our website, and we periodically update our security measures in light of current technologies.</p>
-
-            <h2>Change in Privacy Policy</h2>
-
-            <p>As we plan to ensure our privacy policy remains current, this policy is subject to change. We may modify this policy at any time, in our sole discretion and all modifications will be effective immediately upon our posting of the modifications on this website. Please return periodically to review our privacy policy.</p>
-
-            <p>If you have any questions or concerns at any time about our privacy policy or the use of your personal information, please contact us at admin@thechapter.com with "Att: Privacy Officer" in the subject and we will respond within 48 hours.</p>
-
-            <div class="w3-panel w3-leftbar w3-light-grey">
-                <p><i>"Use products from nature for what it's worth - but never too early, nor too late." Fresh is the new sweet.</i></p>
-                <p>Chef, Coffeeist and Owner: Liam Brown</p>
+    <nav class="navbar navbar-inverse visible-xs">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Logo</a>
             </div>
-            <img src="/images/teppan5.jpg" style="width:100%;max-width:1000px" class="w3-margin-top">
-            <p><strong>Opening hours:</strong> everyday from 6am to 5pm.</p>
-            <p><strong>Address:</strong> 15 Adr street, 5015, NY</p>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Dashboard</a></li>
+                    <li><a href="#">Age</a></li>
+                    <li><a href="#">Gender</a></li>
+                    <li><a href="#">Geo</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row content">
+            <div class="col-sm-3 sidenav hidden-xs">
+                <h2>Logo</h2>
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active"><a href="#section1">Dashboard</a></li>
+                    <li><a href="#section2">Age</a></li>
+                    <li><a href="#section3">Gender</a></li>
+                    <li><a href="#section3">Geo</a></li>
+                </ul><br>
+            </div>
+            <br>
+
+            <div class="col-sm-9">
+                <div class="well">
+                    <h4>Dashboard</h4>
+                    <p>Some text..</p>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="well">
+                            <h4>Users</h4>
+                            <p>1 Million</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="well">
+                            <h4>Pages</h4>
+                            <p>100 Million</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="well">
+                            <h4>Sessions</h4>
+                            <p>10 Million</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="well">
+                            <h4>Bounce</h4>
+                            <p>30%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="well">
+                            <p>Text</p>
+                            <p>Text</p>
+                            <p>Text</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="well">
+                            <p>Text</p>
+                            <p>Text</p>
+                            <p>Text</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="well">
+                            <p>Text</p>
+                            <p>Text</p>
+                            <p>Text</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="well">
+                            <p>Text</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="well">
+                            <p>Text</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <br />
-
-    <br />
 </body>
 </html>
