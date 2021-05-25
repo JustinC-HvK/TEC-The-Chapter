@@ -60,17 +60,18 @@
         }
     </style>
 
-
+    //jquery datepicker.
     <h2>Date</h2>
     <input name="aDate" id="datepicker" type="text"  class="ResClass"/>
 
     /*@Html.TextBoxFor(model => model.Date, new { @class = "ResClass" })*/
     <br />
+    //jquery timepicker.
     <h2>Time</h2>
     <input name="aTime" id="timepick" type="text" class="Timepick"/>
 
     /*@Html.TextBoxFor(model => model.Time, new { @class = "Timepick" })*/
-
+    //select with party size max 8.
     <div class="button">
         <h2>Party Size</h2>
         <select name="party_size" required="">
@@ -95,7 +96,7 @@
         </select>
     </div>
     <br />
-
+    //Start function to add data to db
     <div class="button">
         <input type="submit" name="submit" value="Reserve Your Table" asp-action="ReservationBooking"/>
     </div>
@@ -104,6 +105,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
+<!--linking to jquery files-->
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
@@ -111,7 +113,7 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
-
+    <!--jquery js changing functions of the pickers-->
     <script>
         $("#datepicker").datepicker({
             dateFormat: "dd-mm-yy",
