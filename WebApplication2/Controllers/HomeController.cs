@@ -200,20 +200,18 @@ namespace WebApplication2.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        public IActionResult ReservationBooking(DateTime aDate, DateTime aTime, string party_size, string occasion)
+        public IActionResult ReservationBooking(DateTime aDate, DateTime aTime, string party_size, string occasion, string resname)
         {
             
-            //Runs the SQL Procedure Command
+            //Runs the SQL Procedure Command , added user
             SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             SqlCommand cmd = new SqlCommand("reservationpro", conn);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            
             cmd.Parameters.AddWithValue("@p_date", aDate);
             cmd.Parameters.AddWithValue("@p_time", aTime);
             cmd.Parameters.AddWithValue("@p_partysize", party_size);
             cmd.Parameters.AddWithValue("@p_occasion", occasion);
-
+            cmd.Parameters.AddWithValue("@p_username", resname);
             conn.Open();
             cmd.ExecuteNonQuery();
             conn.Close();
