@@ -13,6 +13,9 @@ using WebApplication2.Models;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
+using System.IO;
+using System.Net;
+using System.Net.Mail;
 
 namespace WebApplication2.Controllers
 {
@@ -37,10 +40,73 @@ namespace WebApplication2.Controllers
         {
             return View();
         }
-
+        [HttpGet("passwordpage")]
         public IActionResult ForgotPassword()
         {
             return View();
+        }
+        [HttpPost("passwordpage")]
+        public IActionResult ForgotPass(string emailID)
+        {
+            //Runs the SQL Procedure Command
+            SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            SqlCommand cmd = new SqlCommand("getEmailID", conn);
+            //finds stored procedure to add to database
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            //linking database variables with form variables
+            cmd.Parameters.AddWithValue("@email", emailID);
+            conn.Open();
+            int loginResult = Convert.ToInt32(cmd.ExecuteScalar());
+            conn.Close();
+            //resets the form
+            if (loginResult == 1)
+            {
+                /*
+                //send email
+                string resetPScode = Guid.NewGuid().ToString();
+                //finds stored procedure to add to database
+                SqlCommand cmd2 = new SqlCommand("addresetcode", conn);
+                cmd2.CommandType = System.Data.CommandType.StoredProcedure;
+                //linking database variables with form variables
+                cmd2.Parameters.AddWithValue("@Resetcode", resetPScode);
+                cmd2.Parameters.AddWithValue("@email", emailID);
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+                */
+                string to = emailID; //To address    
+                string from = "thechapterrestaurant@gmail.com"; //From address    
+                MailMessage message = new MailMessage(from, to);
+
+                string mailbody = "To reset your password please click the link below.";
+                message.Subject = "Reset Password";
+                message.Body = mailbody;
+                message.BodyEncoding = Encoding.UTF8;
+                message.IsBodyHtml = true;
+
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587); //Gmail smtp    
+                System.Net.NetworkCredential basicCredential1 = new
+                System.Net.NetworkCredential("thechapterrestaurant@gmail.com", "thechapter123");
+                client.EnableSsl = true;
+                client.UseDefaultCredentials = false;
+                client.Credentials = basicCredential1;
+                try
+                {
+                    client.Send(message);
+                }
+
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                return Redirect("Index");
+            }
+            else
+            {
+                TempData["Error"] = "Error. Email incorrect";
+                return View("ForgotPassword");
+            }
         }
 
         public IActionResult Index()
@@ -170,14 +236,16 @@ namespace WebApplication2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        //adding reservations into database
         public IActionResult ReservationBooking(DateTime aDate, DateTime aTime, string party_size, string occasion)
         {
             
             //Runs the SQL Procedure Command
             SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             SqlCommand cmd = new SqlCommand("reservationpro", conn);
+            //finds stored procedure to add to database
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            
+            //linking database variables with form variables
             cmd.Parameters.AddWithValue("@p_date", aDate);
             cmd.Parameters.AddWithValue("@p_time", aTime);
             cmd.Parameters.AddWithValue("@p_partysize", party_size);
@@ -186,7 +254,7 @@ namespace WebApplication2.Controllers
             conn.Open();
             cmd.ExecuteNonQuery();
             conn.Close();
-
+            //resets the form
             return Redirect("Secured");
         }
     }
