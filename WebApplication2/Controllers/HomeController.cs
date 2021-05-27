@@ -23,11 +23,13 @@ namespace WebApplication2.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationUserClass _auc;
+        public int adbit = 0;
 
         public HomeController(ILogger<HomeController> logger, ApplicationUserClass auc )
         {
             _logger = logger;
             _auc = auc;
+            
         }
 
         public IActionResult Aboutus()
@@ -124,9 +126,9 @@ namespace WebApplication2.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Validate(string username, string password, string returnUrl)
         {
-            //setting the variables/strings/connections
+            //Set up connection to Admin table
             SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-            string sfu = "usr_hashlogin";
+            string sfu = "usr_adminlogin";
             SqlCommand com = new SqlCommand(sfu, conn);
             com.CommandType = System.Data.CommandType.StoredProcedure;
             com.Parameters.AddWithValue("@username", username.ToString());
@@ -135,13 +137,41 @@ namespace WebApplication2.Controllers
             //open connection
             conn.Open();
 
-            int loginResult = Convert.ToInt32(com.ExecuteScalar());
-            
+            int AdloginResult = Convert.ToInt32(com.ExecuteScalar());
+
             //close connection
             conn.Close();
+            
+            //setting the variables/strings/connections for full user table
+            SqlConnection conm = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            string sfum = "usr_hashlogin";
+            SqlCommand comn = new SqlCommand(sfum, conm);
+            comn.CommandType = System.Data.CommandType.StoredProcedure;
+            comn.Parameters.AddWithValue("@username", username.ToString());
+            comn.Parameters.AddWithValue("@password", password.ToString());
 
-            //if loginresult=one thats in the db
-            if (loginResult == 1)
+            //open connection
+            conm.Open();
+
+            int loginResult = Convert.ToInt32(comn.ExecuteScalar());
+            
+            //close connection
+            conm.Close();
+            
+            //if Adloginresult=one thats in the db
+            if (AdloginResult == 1)
+            {
+                var claims = new List<Claim>();
+                claims.Add(new Claim("username", username));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+                var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+                var claimsPrincipal = new System.Security.Claims.ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync(claimsPrincipal);
+                adbit = 1;
+                return Redirect(returnUrl);
+            }
+            else if (loginResult == 1 && AdloginResult == 0)
             {
                 var claims = new List<Claim>();
                 claims.Add(new Claim("username", username));
@@ -149,6 +179,7 @@ namespace WebApplication2.Controllers
                 var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
                 var claimsPrincipal = new System.Security.Claims.ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync(claimsPrincipal);
+                adbit = 0;
                 return Redirect(returnUrl);
             }
 
@@ -161,6 +192,11 @@ namespace WebApplication2.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
+        public IActionResult Admin()
+        {
+            return View();
+        }
 
         [Authorize]
         public async Task<IActionResult> Logout()
@@ -173,10 +209,8 @@ namespace WebApplication2.Controllers
             return View();
         }
 
-        public IActionResult Admin()
-        {
-            return View();
-        }
+
+        
 
 
         public IActionResult Register()
@@ -212,10 +246,7 @@ namespace WebApplication2.Controllers
 
                     connect.Close();
 
-                        //These lines are funcioning code commented out for test purposes
-                        //_auc.Add(uc);
-                        //_auc.SaveChanges();
-                        //ViewBag.message = "Registration of user" + uc.username + " Is complete";
+                    
                     //Return the user to the Index
                     return RedirectToAction("Index");
                 }
@@ -235,12 +266,11 @@ namespace WebApplication2.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
         //adding reservations into database
         public IActionResult ReservationBooking(DateTime aDate, DateTime aTime, string party_size, string occasion)
         {
             
-            //Runs the SQL Procedure Command
+            //Runs the SQL Procedure Command , added user
             SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             SqlCommand cmd = new SqlCommand("reservationpro", conn);
             //finds stored procedure to add to database
@@ -250,7 +280,7 @@ namespace WebApplication2.Controllers
             cmd.Parameters.AddWithValue("@p_time", aTime);
             cmd.Parameters.AddWithValue("@p_partysize", party_size);
             cmd.Parameters.AddWithValue("@p_occasion", occasion);
-
+            cmd.Parameters.AddWithValue("@p_username", resname);
             conn.Open();
             cmd.ExecuteNonQuery();
             conn.Close();
