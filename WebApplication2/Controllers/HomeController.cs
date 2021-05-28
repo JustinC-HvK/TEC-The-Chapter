@@ -58,13 +58,18 @@ namespace WebApplication2.Controllers
             //linking database variables with form variables
             cmd.Parameters.AddWithValue("@email", emailID);
             conn.Open();
-            int loginResult = Convert.ToInt32(cmd.ExecuteScalar());
-            conn.Close();
+            var loginResult = cmd.ExecuteScalar();
+            conn.Close();;
+            
             //resets the form
-            if (loginResult == 1)
+            if (loginResult != null)
             {
-                /*
-                //send email
+                //unique userid store
+                Console.WriteLine(loginResult.ToString());
+                string guidid = loginResult.ToString();
+                TempData["Guidid"] = guidid;
+
+                //reset password token, creates random number to store into database
                 string resetPScode = Guid.NewGuid().ToString();
                 //finds stored procedure to add to database
                 SqlCommand cmd2 = new SqlCommand("addresetcode", conn);
@@ -76,12 +81,14 @@ namespace WebApplication2.Controllers
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 conn.Close();
-                */
+                
+                //send email
                 string to = emailID; //To address    
                 string from = "thechapterrestaurant@gmail.com"; //From address    
                 MailMessage message = new MailMessage(from, to);
 
-                string mailbody = "To reset your password please click the link below.";
+                string link = "https://localhost:44344/home/resetpassword?guid=" + guidid;
+                string mailbody = "To reset your password please click the link below.\n" + link;
                 message.Subject = "Reset Password";
                 message.Body = mailbody;
                 message.BodyEncoding = Encoding.UTF8;
@@ -102,13 +109,19 @@ namespace WebApplication2.Controllers
                 {
                     throw ex;
                 }
-                return Redirect("Index");
+
+                return View("ForgotPassword");
             }
             else
             {
                 TempData["Error"] = "Error. Email incorrect";
                 return View("ForgotPassword");
             }
+        }
+
+        public IActionResult resetpassword()
+        {
+            return View();
         }
 
         public IActionResult Index()
@@ -267,7 +280,7 @@ namespace WebApplication2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         //adding reservations into database
-        public IActionResult ReservationBooking(DateTime aDate, DateTime aTime, string party_size, string occasion)
+        public IActionResult ReservationBooking(DateTime aDate, DateTime aTime, string party_size, string occasion, string resname)
         {
             
             //Runs the SQL Procedure Command , added user
