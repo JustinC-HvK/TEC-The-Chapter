@@ -139,6 +139,11 @@ namespace WebApplication2.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Validate(string username, string password, string returnUrl)
         {
+            //Check if returnUrl is empty. If yes, set to Homepage so users don't get a null value error
+            if (returnUrl == null)
+            {
+                returnUrl = "Home";
+            }
             //Set up connection to Admin table
             SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             string sfu = "usr_adminlogin";
