@@ -49,5 +49,8 @@ namespace WebApplication2.Models
         [DataType(DataType.Date)]
         [Display(Name = "Date of Birth")]
         public DateTime dob { get; set; }
+
+
+        public static string static_guid { get; set; }
     }
 }

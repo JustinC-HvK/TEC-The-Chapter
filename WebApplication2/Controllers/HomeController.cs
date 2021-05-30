@@ -16,6 +16,8 @@ using System.Text;
 using System.IO;
 using System.Net;
 using System.Net.Mail;
+using System.Web;
+
 
 namespace WebApplication2.Controllers
 {
@@ -87,7 +89,7 @@ namespace WebApplication2.Controllers
                 string from = "thechapterrestaurant@gmail.com"; //From address    
                 MailMessage message = new MailMessage(from, to);
 
-                string link = "https://localhost:44344/home/resetpassword?guid=" + guidid;
+                string link = "https://localhost:44344/home/resetpassword?guidcode=" + guidid;
                 string mailbody = "To reset your password please click the link below.\n" + link;
                 message.Subject = "Reset Password";
                 message.Body = mailbody;
@@ -119,9 +121,31 @@ namespace WebApplication2.Controllers
             }
         }
 
-        public IActionResult resetpassword()
+        //https://localhost:44344/home/resetpassword?guidcode=95c575ab-e4c5-4308-b650-e46e5f92a229
+        public IActionResult resetpassword(string change_password)
         {
+            string str_paramenter = HttpContext.Request.QueryString.Value;
+            string str_guid = str_paramenter.Substring(10);
+            UserClass.static_guid = str_guid;
+            TempData["Guidid"] = str_guid;
             return View();
+        }
+
+        public IActionResult restpasswordfunction(string change_password)
+        {
+            string savedguid = UserClass.static_guid;
+            //Runs the SQL Procedure Command
+            SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            SqlCommand cmd = new SqlCommand("change_pass", conn);
+            //finds stored procedure to add to database
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            //linking database variables with form variables
+            cmd.Parameters.AddWithValue("@password", change_password);
+            cmd.Parameters.AddWithValue("@db_guid", savedguid);
+            conn.Open();
+            var loginResult = cmd.ExecuteScalar();
+            conn.Close(); ;
+            return View("Index");
         }
 
         public IActionResult Index()
