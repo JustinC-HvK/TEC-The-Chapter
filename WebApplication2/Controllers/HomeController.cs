@@ -270,31 +270,77 @@ namespace WebApplication2.Controllers
                 //Check the user's birthday to ensure they are within a valid range
                 if (uc.dob.Year > 1900 && uc.dob.Year < 2003)
                 {
-                    //Add the user values and save them to the database if validation passes
-                    SqlConnection connect = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-                    string spo = "user_reg";
-                    SqlCommand comm = new SqlCommand(spo, connect);
-                    comm.CommandType = System.Data.CommandType.StoredProcedure;
-                    comm.Parameters.AddWithValue("@firstname", uc.firstname.ToString());
-                    comm.Parameters.AddWithValue("@lastname", uc.lastname.ToString());
-                    comm.Parameters.AddWithValue("@username", uc.username.ToString());
-                    comm.Parameters.AddWithValue("@password", uc.password.ToString());
-                    comm.Parameters.AddWithValue("@email", uc.email.ToString());
-                    comm.Parameters.AddWithValue("@number", uc.number);
-                    comm.Parameters.AddWithValue("@dob", uc.dob);
-                    connect.Open();
+                    //Check if Username exists
+                    SqlConnection conm = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                    string sfum = "usr_usercheck";
+                    SqlCommand comn = new SqlCommand(sfum, conm);
+                    comn.CommandType = System.Data.CommandType.StoredProcedure;
+                    comn.Parameters.AddWithValue("@username", uc.username.ToString());
 
-                    comm.ExecuteReader();
+                    //open connection
+                    conm.Open();
 
-                    connect.Close();
+                    int userResult = Convert.ToInt32(comn.ExecuteScalar());
 
-                    
-                    //Return the user to the Index
-                    return RedirectToAction("Index");
+                    //close connection
+                    conm.Close();
+                    //Check if Email exists
+                    SqlConnection cnm = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                    string sfm = "usr_emailcheck";
+                    SqlCommand cmn = new SqlCommand(sfm, cnm);
+                    cmn.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmn.Parameters.AddWithValue("@email", uc.email.ToString());
+
+                    //open connection
+                    cnm.Open();
+
+                    int emailResult = Convert.ToInt32(cmn.ExecuteScalar());
+
+                    //close connection
+                    cnm.Close();
+                    if (userResult != 0 || emailResult != 0)
+                    {
+                        TempData["Error"] = "Error. Username and Email are Taken. Please choose a different Username and Email";
+                    }
+                    else if (userResult != 0)
+                    {
+                        TempData["Error"] = "Error. Username Taken. Please choose another Username.";
+                        return View();
+                    }
+                    else if (emailResult != 0)
+                    {
+                        TempData["Error"] = "Error. Email Taken. Please choose another Email.";
+                        return View();
+                    }
+                    else
+                    {
+                        //Add the user values and save them to the database if validation passes
+                        SqlConnection connect = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                        string spo = "user_reg";
+                        SqlCommand comm = new SqlCommand(spo, connect);
+                        comm.CommandType = System.Data.CommandType.StoredProcedure;
+                        comm.Parameters.AddWithValue("@firstname", uc.firstname.ToString());
+                        comm.Parameters.AddWithValue("@lastname", uc.lastname.ToString());
+                        comm.Parameters.AddWithValue("@username", uc.username.ToString());
+                        comm.Parameters.AddWithValue("@password", uc.password.ToString());
+                        comm.Parameters.AddWithValue("@email", uc.email.ToString());
+                        comm.Parameters.AddWithValue("@number", uc.number);
+                        comm.Parameters.AddWithValue("@dob", uc.dob);
+                        connect.Open();
+
+                        comm.ExecuteReader();
+
+                        connect.Close();
+
+
+                        //Return the user to the Index
+                        return RedirectToAction("Index");
+                    }
                 }
 
             }
             //Return user to register page if validation fails
+            TempData["Error"] = "Error. Date of birth must be between 1901 and 2002.";
             return View();
         }
 
