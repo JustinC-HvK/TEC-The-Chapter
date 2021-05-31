@@ -288,6 +288,7 @@ namespace WebApplication2.Controllers
 
                     //close connection
                     conm.Close();
+
                     //Check if Email exists
                     SqlConnection cnm = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
                     string sfm = "usr_emailcheck";
@@ -302,6 +303,8 @@ namespace WebApplication2.Controllers
 
                     //close connection
                     cnm.Close();
+                    
+                    //Check results and display relevent error if conditions are met
                     if (userResult != 0 || emailResult != 0)
                     {
                         TempData["Error"] = "Error. Username and Email are Taken. Please choose a different Username and Email";
@@ -341,10 +344,17 @@ namespace WebApplication2.Controllers
                         return RedirectToAction("Index");
                     }
                 }
+                else
+                {
+                    //Return user to register page if DOB is out of range
+                    TempData["Error"] = "Error. Date of birth must be between 1901 and 2002";
+                    return View();
+                }
+                
 
             }
             //Return user to register page if validation fails
-            TempData["Error"] = "Error. Date of birth must be between 1901 and 2002.";
+            TempData["Error"] = "Error. Validation failed";
             return View();
         }
 
