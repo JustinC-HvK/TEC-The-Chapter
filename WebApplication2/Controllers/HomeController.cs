@@ -17,7 +17,9 @@ using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Web;
-
+using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace WebApplication2.Controllers
 {
@@ -25,7 +27,7 @@ namespace WebApplication2.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationUserClass _auc;
-        public int adbit = 0;
+        
 
         public HomeController(ILogger<HomeController> logger, ApplicationUserClass auc )
         {
@@ -161,29 +163,50 @@ namespace WebApplication2.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Validate(string username, string password, string returnUrl)
+        public async Task<IActionResult> Validate(string username, string password, string returnUrl, AdminClass ac)
         {
             //Check if returnUrl is empty. If yes, set to Homepage so users don't get a null value error
             if (returnUrl == null)
             {
                 returnUrl = "Home";
             }
-            //Set up connection to Admin table
+            
+            //Set up connection to Admin table to check Password to Hash
             SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-            string sfu = "usr_adminlogin";
+            string sfu = "passwordget";
             SqlCommand com = new SqlCommand(sfu, conn);
-            com.CommandType = System.Data.CommandType.StoredProcedure;
+            com.CommandType = CommandType.StoredProcedure;
             com.Parameters.AddWithValue("@username", username.ToString());
             com.Parameters.AddWithValue("@password", password.ToString());
-
-            //open connection
+            com.Parameters.Add("@hashedpass", SqlDbType.VarChar, 64).Direction = ParameterDirection.Output;
+            
+            //Connect to the database to execute stored procedure
             conn.Open();
-
-            int AdloginResult = Convert.ToInt32(com.ExecuteScalar());
-
+            com.ExecuteNonQuery();
+            
+            //Save the result of the query to a variable and convert the value to a string
+            var hashedpass = com.Parameters["@hashedpass"].Value.ToString();
+            
             //close connection
             conn.Close();
             
+            // Run Entity Framework on the Database to check user exists
+            var AdloginResult = _auc.admintb.Count(u => u.username.Equals(ac.username));
+            
+            //Check if the stored procedure and Entity framework both found the user in Admintb
+            if (AdloginResult != 0 && hashedpass.Length > 0)
+            {
+                var claims = new List<Claim>();
+                claims.Add(new Claim("username", username));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+                var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+                var claimsPrincipal = new System.Security.Claims.ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync(claimsPrincipal);
+                return Redirect(returnUrl);
+            }
+            //Didn't find user in Admintb? Run checks on the normal usertable
+
             //setting the variables/strings/connections for full user table
             SqlConnection conm = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             string sfum = "usr_hashlogin";
@@ -201,27 +224,25 @@ namespace WebApplication2.Controllers
             conm.Close();
             
             //if Adloginresult=one thats in the db
-            if (AdloginResult == 1)
+            //if (AdloginResult == 1)
+            //{
+            //    //var claims = new List<Claim>();
+            //    //claims.Add(new Claim("username", username));
+            //    //claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
+            //    //claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+            //    //var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+            //    //var claimsPrincipal = new System.Security.Claims.ClaimsPrincipal(claimsIdentity);
+            //    //await HttpContext.SignInAsync(claimsPrincipal);
+            //    //return Redirect(returnUrl);
+            //}
+            if (loginResult == 1 && AdloginResult == 0)
             {
                 var claims = new List<Claim>();
                 claims.Add(new Claim("username", username));
                 claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
-                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
                 var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
                 var claimsPrincipal = new System.Security.Claims.ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync(claimsPrincipal);
-                adbit = 1;
-                return Redirect(returnUrl);
-            }
-            else if (loginResult == 1 && AdloginResult == 0)
-            {
-                var claims = new List<Claim>();
-                claims.Add(new Claim("username", username));
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
-                var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
-                var claimsPrincipal = new System.Security.Claims.ClaimsPrincipal(claimsIdentity);
-                await HttpContext.SignInAsync(claimsPrincipal);
-                adbit = 0;
                 return Redirect(returnUrl);
             }
 
