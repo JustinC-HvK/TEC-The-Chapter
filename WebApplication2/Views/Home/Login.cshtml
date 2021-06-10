@@ -5,15 +5,9 @@
 <h1>Please Login To View Reservations</h1>
 <h1>User Login</h1>
 
-
 @if (!string.IsNullOrEmpty(error))
 {
 <h2 class="alert-danger" style="padding:20px;">@error</h2>            }
-
-
-
-
-
 <div class="row  container login-container" style="background-image: url('https://images.squarespace-cdn.com/content/v1/57311fcc7da24f07c2cda0a0/1554258314124-PKM3OUWSGUGBLXKVVCER/ke17ZwdGBToddI8pDm48kMg31_G9StrSH3mLgCBodIt7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0vApyh6NsI3juLutxTva2hgNx1ii9tPa4ptU_hfT1TWxIsYzDh4O0SnU0lw9r7L2EQ/Amano%252B_099.jpg?format=2500w'); background-size: cover;">
     <div class="col-md-12">
         <form action="/login?ReturnUrl=@System.Net.WebUtility.UrlEncode(returnUrl)" method="post">
@@ -28,14 +22,7 @@
             <a href='@Url.Action("ForgotPassword", "Home")'>
                 <button type="button" class="btn btn-primary">Forgot Password</button>
             </a>
-
-            
             <button type="button" class="btn btn-primary">Create An Account</button>
-                
         </form>
-
-
-
     </div>
-
 </div>
