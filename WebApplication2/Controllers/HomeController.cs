@@ -223,18 +223,6 @@ namespace WebApplication2.Controllers
             //close connection
             conm.Close();
             
-            //if Adloginresult=one thats in the db
-            //if (AdloginResult == 1)
-            //{
-            //    //var claims = new List<Claim>();
-            //    //claims.Add(new Claim("username", username));
-            //    //claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
-            //    //claims.Add(new Claim(ClaimTypes.Role, "Admin"));
-            //    //var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
-            //    //var claimsPrincipal = new System.Security.Claims.ClaimsPrincipal(claimsIdentity);
-            //    //await HttpContext.SignInAsync(claimsPrincipal);
-            //    //return Redirect(returnUrl);
-            //}
             if (loginResult == 1 && AdloginResult == 0)
             {
                 var claims = new List<Claim>();
