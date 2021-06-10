@@ -378,9 +378,10 @@ namespace WebApplication2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         //adding reservations into database
-        public IActionResult ReservationBooking(DateTime aDate, DateTime aTime, string party_size, string occasion, string resname)
+        public IActionResult ReservationBooking(string EmailID, DateTime aDate, DateTime aTime, string party_size, string occasion, string resname)
         {
-            
+            string formatted_Date = aDate.ToString("dd/MM/yyyy");
+            string formatted_Time = aTime.ToString("hh:mm tt");
             //Runs the SQL Procedure Command , added user
             SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             SqlCommand cmd = new SqlCommand("reservationpro", conn);
@@ -391,10 +392,38 @@ namespace WebApplication2.Controllers
             cmd.Parameters.AddWithValue("@p_time", aTime);
             cmd.Parameters.AddWithValue("@p_partysize", party_size);
             cmd.Parameters.AddWithValue("@p_occasion", occasion);
-            cmd.Parameters.AddWithValue("@p_username", resname);
+            cmd.Parameters.AddWithValue("@p_username", EmailID);
             conn.Open();
             cmd.ExecuteNonQuery();
             conn.Close();
+
+            //send email
+            string to = EmailID; //To address    
+            string from = "thechapterrestaurant@gmail.com"; //From address    
+            MailMessage message = new MailMessage(from, to);
+
+            string mailbody = "Thank you for creating a booking at The Chapter. \n Your Booking is confirmed for - " + formatted_Date + " at " + formatted_Time + "\n";
+            message.Subject = "Booking Confirmation";
+            message.Body = mailbody;
+            message.BodyEncoding = Encoding.UTF8;
+            message.IsBodyHtml = true;
+
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587); //Gmail smtp    
+            System.Net.NetworkCredential basicCredential1 = new
+            System.Net.NetworkCredential("thechapterrestaurant@gmail.com", "thechapter123");
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = false;
+            client.Credentials = basicCredential1;
+            try
+            {
+                client.Send(message);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
             //resets the form
             return Redirect("Secured");
         }
