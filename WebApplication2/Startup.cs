@@ -27,13 +27,16 @@ namespace WebApplication2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationUserClass>(options => options.UseSqlServer(Configuration.GetConnectionString("connection")));
+            services.AddDbContext<ApplicationResClass>(options => options.UseSqlServer(Configuration.GetConnectionString("connection")));
             services.AddControllersWithViews();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
                     options.LoginPath = "/login";
                 });
-
+            services.AddHttpContextAccessor();
+            services.AddSession();
+            
 
 
 
@@ -56,7 +59,7 @@ namespace WebApplication2
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthentication();
 
             app.UseAuthorization();

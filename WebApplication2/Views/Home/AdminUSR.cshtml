@@ -1,0 +1,58 @@
+﻿@using Microsoft.AspNetCore.Http
+@model List<UseClass>
+
+
+<div>
+
+
+    <h1>Reservations</h1>
+
+    <table>
+        <tr>
+            <th>First name</th>
+            <th>Last Name</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Birthdate</th>
+        </tr>
+        @foreach (var Usetb in Model)
+        {
+<tr>
+    <td>@Usetb.firstname</td>
+    <td>@Usetb.lastname</td>
+    <td>@Usetb.username</td>
+    <td>@Usetb.password</td>
+    <td>@Usetb.email</td>
+    <td>@Usetb.number</td>
+    <td>@Usetb.dob</td>
+</tr>}
+    </table>
+    <br>
+    <a href='@Url.Action("Admin", "Home")'>
+        <button type="button" class="btn btn-primary">Switch to Reservation info</button>
+    </a>
+    <a href='@Url.Action("Register", "Home")'>
+        <button type="button" class="btn btn-primary">Register a user</button>
+    </a>
+    <div class="row container login-container">
+        <div class="col-md-12">
+            <form method="post">
+                <div class="form-group">
+                    <input type="text" name="username" placeholder="Username" required="" />
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="E-Mail" required="" />
+                </div>
+                <br>
+                <label for="newname">To change a username, input the new username in the box below</label>
+                <div class="form-group">
+                    <input type="text" name="newname" placeholder="New Username"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Delete</button>
+            </form>
+        </div>
+    </div>
+
+</div>
