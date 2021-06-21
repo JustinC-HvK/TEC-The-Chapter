@@ -16,42 +16,42 @@
         <form method="post">
             @*Create form fields*@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group  text-light bg-dark">
                 <label asp-for="firstname">First Name</label>
                 <input asp-for="firstname" class="form-control" />
-                <span asp-validation-for="firstname" class="text-danger"></span>
+                <span asp-validation-for="firstname" class="text-danger "></span>
             </div>
-            <div class="form-group">
+            <div class="form-group  text-light bg-dark">
                 <label asp-for="lastname">Last Name</label>
                 <input asp-for="lastname" class="form-control" />
                 <span asp-validation-for="lastname" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-light bg-dark">
                 <label asp-for="username"></label>
                 <input asp-for="username" class="form-control" />
                 <span asp-validation-for="username" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-light bg-dark">
                 <label asp-for="email"></label>
                 <input asp-for="email" class="form-control" />
                 <span asp-validation-for="email" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-light bg-dark">
                 <label asp-for="number">Phone Number</label>
                 <input asp-for="number" class="form-control" />
                 <span asp-validation-for="number" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-light bg-dark">
                 <label asp-for="password"></label>
                 <input asp-for="password" class="form-control" type="password" />
                 <span asp-validation-for="password" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-light bg-dark">
                 <label asp-for="confirmpassword">Re-enter Password</label>
                 <input asp-for="confirmpassword" class="form-control" type="password" />
                 <span asp-validation-for="confirmpassword" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-light bg-dark">
                 <label asp-for="dob">Date of Birth</label>
                 <input asp-for="dob" class="form-control" type="date" />
                 <span asp-validation-for="dob" class="text-danger"></span>
