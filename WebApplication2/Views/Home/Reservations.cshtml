@@ -18,6 +18,11 @@
     <meta name="author" content="">
     <title>Document</title>
 </head>
+<style>
+   #but{
+
+   }
+</style>
 <body>
     
     @using (Html.BeginForm())
@@ -59,9 +64,13 @@
         </div>
         <br />
         <div class="button">
-            <input type="submit" name="submit" value="Reserve Your Table" />
+            <input type="submit" id="but" name="submit" value="Reserve Your Table" />
         </div>
     }
+
+    <br />
+    <br />
+    <br />
 
     @section Scripts {
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -94,6 +103,8 @@
             });
         </script>
     }
-
+    <br />
+    <br />
+    <br />
 </body>
 </html>
