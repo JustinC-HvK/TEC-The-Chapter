@@ -38,6 +38,7 @@
             margin-left: 110px;
             margin-right: auto;
             text-align: center;
+            color:black;
         }
 
         .Timepick {
@@ -58,11 +59,25 @@
         .button {
             text-align: center;
         }
+
+        #but {
+            background-color: #555555;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+        #brandon{
+            color: black;
+        }
     </style>
 
 
     <h2>Email For Booking</h2>
-    <input type="email" name="EmailID" placeholder="Your Email Here" required="" class="ResClass"/>
+    <input type="email" name="EmailID" id="brandon" placeholder="Your Email Here" required="" class="ResClass"/>
     
     //jquery datepicker.
     <h2>Date</h2>
@@ -102,7 +117,7 @@
     <br />
     //Start function to add data to db
     <div class="button">
-        <input type="submit" name="submit" value="Reserve Your Table" asp-action="ReservationBooking"/>
+        <input type="submit" name="submit" id="but" value="Reserve Your Table" asp-action="ReservationBooking"/>
     </div>
 }
 
