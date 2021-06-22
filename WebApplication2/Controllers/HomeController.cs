@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Session;
 using Microsoft.Extensions.Logging;
 using WebApplication2.Models;
 using System.Data.SqlClient;
@@ -27,13 +28,14 @@ namespace WebApplication2.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationUserClass _auc;
-        
+        private readonly ApplicationResClass _db;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationUserClass auc )
+
+        public HomeController(ILogger<HomeController> logger, ApplicationUserClass auc, ApplicationResClass db )
         {
             _logger = logger;
             _auc = auc;
-            
+            _db = db;
         }
 
         public IActionResult Aboutus()
@@ -242,11 +244,176 @@ namespace WebApplication2.Controllers
             }
 
         }
+        
 
         [Authorize(Roles = "Admin")]
+        
         public IActionResult Admin()
         {
-            return View();
+            //Initialize the list
+            var model = new List<ResdbClass>();
+            //Setup connection to the database
+            SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            SqlCommand cmd = new SqlCommand("SELECT * FROM res");
+            cmd.Connection = conn;
+            //Open the connection
+            conn.Open();
+            //Read the data in the database
+            SqlDataReader rdr = cmd.ExecuteReader();
+            //Add data to the page table
+            while (rdr.Read())
+            {
+                var Restb = new ResdbClass();
+                Restb.udate = rdr["udate"].ToString();
+                Restb.utime = rdr["utime"].ToString();
+                Restb.partysize = rdr["partysize"].ToString();
+                Restb.occasion = rdr["occasion"].ToString();
+                Restb.username = rdr["username"].ToString();
+                model.Add(Restb);
+            }
+            //Close the connection
+            conn.Close();
+
+            
+            //Show the view
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Admin(string partysize, string occasion, string username, string updatepartysize)
+        {
+            //Setup connection to the database
+            SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            string spr = "res_update";
+            //If updatepartysize field is left empty or is not a number, set spr to the delete procedure
+            if (updatepartysize == null || int.TryParse(updatepartysize, out int testsize) == false)
+            {
+                spr = "res_delete";
+            }
+            SqlCommand cmd = new SqlCommand(spr, conn);
+            //Check the partysize and updatepartysize fields are numbers. If all conditions are met, continue with connection
+            if (int.TryParse(partysize, out int size) != false || int.TryParse(updatepartysize, out int upsize) != false && spr == "res_update")
+            {
+
+
+                
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@partysize", int.Parse(partysize));
+                cmd.Parameters.AddWithValue("@occasion", occasion.ToString());
+                cmd.Parameters.AddWithValue("@username", username.ToString());
+                //If spr is res_update, add the updatepartysize parameter
+                if (spr == "res_update")
+                {
+                    cmd.Parameters.AddWithValue("@updatepartysize", int.Parse(updatepartysize));
+                }
+                //Open the connection
+                conn.Open();
+                //Execute stored procedure
+                cmd.ExecuteNonQuery();
+                //Close the connection
+                conn.Close();
+            }
+            //Refresh the list and reload the page
+            var model = new List<ResdbClass>();
+            conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            cmd = new SqlCommand("SELECT * FROM res");
+            cmd.Connection = conn;
+            conn.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                var Restb = new ResdbClass();
+                Restb.udate = rdr["udate"].ToString();
+                Restb.utime = rdr["utime"].ToString();
+                Restb.partysize = rdr["partysize"].ToString();
+                Restb.occasion = rdr["occasion"].ToString();
+                Restb.username = rdr["username"].ToString();
+                model.Add(Restb);
+            }
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult AdminUSR()
+        {
+            //Initialize the list
+            var usrmodel = new List<UseClass>();
+            //Setup connection to the database
+            SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            SqlCommand cmd = new SqlCommand("SELECT * FROM hashtb");
+            cmd.Connection = conn;
+            //Open the connection
+            conn.Open();
+            //Read the data in the database
+            SqlDataReader rdr = cmd.ExecuteReader();
+            //Add the data to the page table
+            while (rdr.Read())
+            {
+                var Usetb = new UseClass();
+                Usetb.firstname = rdr["firstname"].ToString();
+                Usetb.lastname = rdr["lastname"].ToString();
+                Usetb.username = rdr["username"].ToString();
+                Usetb.password = rdr["password"].ToString();
+                Usetb.email = rdr["email"].ToString();
+                Usetb.number = rdr["number"].ToString();
+                Usetb.dob = rdr["dob"].ToString();
+                usrmodel.Add(Usetb);
+            }
+
+            
+            //Show the view
+            return View(usrmodel);
+        }
+
+        [HttpPost]
+        public IActionResult AdminUsr(string username, string email, string newname)
+        {
+            //Setup connection to the database
+            SqlConnection conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            string spr = "usr_delete";
+            //Set spr to usr_update if newname is not null
+            if (newname != null)
+            {
+                spr = "usr_update";
+            }    
+            SqlCommand cmd = new SqlCommand(spr, conn);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@username", username.ToString());
+            cmd.Parameters.AddWithValue("@email", email.ToString());
+            //Add the newname parameter if the spr is usr_update
+            if (spr == "usr_update")
+            {
+                cmd.Parameters.AddWithValue("@newname", newname.ToString());
+            }
+            //Open the connection
+            conn.Open();
+            //Execute stored procedure
+            cmd.ExecuteNonQuery();
+            //Close the connection
+            conn.Close();
+            //Refresh the list and reload the page
+            var usrmodel = new List<UseClass>();
+            conn = new SqlConnection(@"Data Source=chapter.database.windows.net;Initial Catalog=chapterdb;User ID=chapter;Password=Usepassword1;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            cmd = new SqlCommand("SELECT * FROM hashtb");
+            {
+                cmd.Connection = conn;
+                conn.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    var Usetb = new UseClass();
+                    Usetb.firstname = rdr["firstname"].ToString();
+                    Usetb.lastname = rdr["lastname"].ToString();
+                    Usetb.username = rdr["username"].ToString();
+                    Usetb.password = rdr["password"].ToString();
+                    Usetb.email = rdr["email"].ToString();
+                    Usetb.number = rdr["number"].ToString();
+                    Usetb.dob = rdr["dob"].ToString();
+                    usrmodel.Add(Usetb);
+                }
+                conn.Close();
+                return View(usrmodel);
+            }
         }
 
         [Authorize]
